@@ -10,7 +10,7 @@ DATABASE_NAME = "heart_disease"
 
 COLLECTION_NAME = "stroke_data"
 
-MONGODB_URL_KEY = os.environ.get("MONGODB_URL")
+#MONGODB_URL_KEY = os.environ.get("MONGODB_URL")
 
 
 ARTIFACT_DIR: str = "artifact"

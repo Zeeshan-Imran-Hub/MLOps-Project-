@@ -3,13 +3,17 @@ import sys
 import pandas as pd
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
-from heart_disease_prediction.constants import MONGODB_URL_KEY, DATABASE_NAME, COLLECTION_NAME
+from heart_disease_prediction.constants import  DATABASE_NAME, COLLECTION_NAME
 from pymongo import MongoClient
 
 from heart_disease_prediction.entity.config_entity import DataIngestionConfig
 from heart_disease_prediction.entity.artifact_entity import DataIngestionArtifact
 # from heart_disease_prediction.exception import heart_disease_prediction_exception
 # from heart_disease_prediction.logger import logging
+
+import certifi
+
+ca = certifi.where()
 
 class DataIngestion:
     def __init__(
@@ -32,7 +36,10 @@ class DataIngestion:
         Output      :   DataFrame containing the data from MongoDB
         """
         try:
-            client = MongoClient(os.getenv(MONGODB_URL_KEY))
+            mongodb_url = os.getenv('MONGODB_URL')
+            if not mongodb_url:
+                raise ValueError("MONGODB_URL_KEY environment variable not defined")
+            client = MongoClient(mongodb_url, tlsCAFile=ca)
             database = client[DATABASE_NAME]
             collection = database[COLLECTION_NAME]
             data = list(collection.find())
